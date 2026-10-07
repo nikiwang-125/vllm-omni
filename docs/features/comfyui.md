@@ -103,6 +103,15 @@ modes, and each mode is a group you enable or mute. It does not include a
 prompt LLM. See the
 [all-in-one workflow guide](https://github.com/vllm-project/vllm-omni/blob/main/apps/ComfyUI-vLLM-Omni/docs/h3-06-all-in-one.md).
 
+## MiniMax H3 music video workflow
+
+The **MiniMax-H3 Music Video** template builds a multi-shot music video from a
+supplied track. Each shot is a Ref2VA request driven by its slice of the track
+(`audio_mode=lock_source` on **MiniMax-H3 Video Params**) with a shared
+character/style image. ComfyUI's Concatenate Video node joins the shots and
+attaches the original recording. See the
+[music video workflow guide](https://github.com/vllm-project/vllm-omni/blob/main/apps/ComfyUI-vLLM-Omni/docs/h3-03-music-video.md).
+
 ## Examples & Screenshots
 
 Please read the [ComfyUI integration's README](https://github.com/vllm-project/vllm-omni/tree/main/apps/ComfyUI-vLLM-Omni) for more info.

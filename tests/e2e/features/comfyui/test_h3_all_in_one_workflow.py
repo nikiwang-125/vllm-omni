@@ -80,7 +80,9 @@ def test_all_in_one_workflow_matches_omni_node_interfaces(workflow):
             *schema.get("required", {}),
         ]
         for input_ in node["inputs"]:
-            assert input_["type"] == inputs[input_["name"]][0]
+            kind = inputs[input_["name"]][0]
+            # Saved workflows record combo widgets as COMBO, not their option list.
+            assert input_["type"] == ("COMBO" if isinstance(kind, list) else kind)
         assert tuple(output["type"] for output in node["outputs"]) == cls.RETURN_TYPES
         expected_widgets = len(schema.get("required", {}))
         if "seed" in schema.get("required", {}):
@@ -175,7 +177,7 @@ def test_all_in_one_workflow_defaults_and_portable_assets(workflow):
     assert [node["widgets_values"] for node in by_type["VLLMOmniDiffusionSampling"]] == [
         [1, 50, 1.0, 1.0, False, False, 42, "fixed"]
     ]
-    assert [node["widgets_values"] for node in by_type["VLLMOmniMiniMaxH3Params"]] == [[3.0, 12.0]]
+    assert [node["widgets_values"] for node in by_type["VLLMOmniMiniMaxH3Params"]] == [[3.0, 12.0, "native"]]
     for node in by_type["LoadImage"]:
         filename = node["widgets_values"][0]
         assert filename and Path(filename).name == filename

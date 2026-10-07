@@ -306,6 +306,16 @@ class VLLMOmniClient:
             matched_pattern is None or "MiniMax-H3" not in matched_pattern
         ):
             raise ValueError("first_frame and last_frame are supported only for MiniMax-H3; use frame for this model.")
+        # Driving audio only reaches the server as a reference upload, so lock_source
+        # needs exactly one audio on Video References.
+        if (model_params or {}).get("audio_mode") == "lock_source":
+            driving_audios = [
+                name for name, value in (references or {}).items() if name.startswith("audio_") and value is not None
+            ]
+            if len(driving_audios) != 1:
+                raise ValueError(
+                    "MiniMax-H3 audio_mode=lock_source requires exactly one audio connected to Video References."
+                )
 
         # === regular payload fields ===
         form = aiohttp.FormData()
