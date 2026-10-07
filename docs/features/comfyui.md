@@ -94,6 +94,15 @@ See the [H3 workflow guide](https://github.com/vllm-project/vllm-omni/blob/main/
 for server setup, template import, Turbo configuration, recorded validation,
 and saved-video/audio checks.
 
+## MiniMax H3 all-in-one workflow
+
+The **MiniMax-H3 All-in-One** template puts T2VA, first/last-frame FL2VA, and
+mixed-reference Ref2VA in one graph built from the existing nodes. The server
+URL, served model name, duration, sampling, and flow shifts are shared by all
+modes, and each mode is a group you enable or mute. It does not include a
+prompt LLM. See the
+[all-in-one workflow guide](https://github.com/vllm-project/vllm-omni/blob/main/apps/ComfyUI-vLLM-Omni/docs/h3-06-all-in-one.md).
+
 ## Examples & Screenshots
 
 Please read the [ComfyUI integration's README](https://github.com/vllm-project/vllm-omni/tree/main/apps/ComfyUI-vLLM-Omni) for more info.
