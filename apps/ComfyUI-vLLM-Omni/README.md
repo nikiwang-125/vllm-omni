@@ -226,6 +226,10 @@ optional Turbo sampling, H3 parameters, and Remote LoRA nodes. See the
 settings, and saved-video/audio validation. Set Remote LoRA’s `local_path` to
 the downloaded Turbo artifact on your server before enabling Turbo.
 
+#### H3 all-in-one (H3-06)
+
+The **vLLM-Omni MiniMax-H3 All-in-One** template puts T2VA, first/last-frame FL2VA, and mixed-reference Ref2VA in one graph. The server URL, served model name, duration, sampling, and flow shifts are set once and shared by all modes; enable the group for the mode you want to run. It does not include a prompt LLM. See [workflow setup](docs/h3-06-all-in-one.md).
+
 #### H3 video upscale (WF-07)
 
 The **vLLM-Omni MiniMax H3 Video Upscale** template generates video remotely, upscales it with SeedVR2, and saves the original and upscaled videos with the generated audio and FPS. See [workflow setup](docs/wf07-h3-upscale.md).
