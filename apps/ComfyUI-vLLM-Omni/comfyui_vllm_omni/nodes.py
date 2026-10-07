@@ -61,9 +61,11 @@ class _VLLMOmniGenerateBase:
         Can only validate this model's own input. Cannot check inputs from other nodes.
         See: https://docs.comfy.org/custom-nodes/backend/server_overview#validate_inputs
         """
-        if not url:
+        # A linked input (e.g. a shared Primitive node) arrives as None during validation;
+        # its value is only known at execution time.
+        if url is not None and not url:
             return "URL must not be empty"
-        if not model:
+        if model is not None and not model:
             return "Model must not be empty"
         return True
 

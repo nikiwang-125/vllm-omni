@@ -193,3 +193,10 @@ def test_all_in_one_workflow_defaults_and_portable_assets(workflow):
     }
     guide = next(node for node in by_type["MarkdownNote"] if node["title"] == "How to use this graph")
     assert "no prompt-assistance stage" in guide["widgets_values"][0]
+
+
+def test_generate_video_accepts_url_and_model_from_shared_primitives():
+    # ComfyUI passes linked inputs to VALIDATE_INPUTS as None; the template links url and model.
+    assert omni_nodes.VLLMOmniGenerateVideo.VALIDATE_INPUTS(url=None, model=None) is True
+    assert omni_nodes.VLLMOmniGenerateVideo.VALIDATE_INPUTS(url="", model="m") == "URL must not be empty"
+    assert omni_nodes.VLLMOmniGenerateVideo.VALIDATE_INPUTS(url="u", model="") == "Model must not be empty"
