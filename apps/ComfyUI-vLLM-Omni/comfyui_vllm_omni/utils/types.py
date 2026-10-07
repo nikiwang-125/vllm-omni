@@ -30,6 +30,9 @@ class MiniMaxH3ModelSpecificParams(dict):
     pass
 
 
+MINIMAX_H3_AUDIO_MODES = ["native", "lock_source"]
+
+
 MAX_REFERENCE_IMAGES = 9
 MAX_REFERENCE_VIDEOS = 3
 MAX_REFERENCE_AUDIOS = 3

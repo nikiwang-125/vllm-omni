@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the vLLM-Omni project
 
+import json
 from io import BytesIO
 from unittest.mock import AsyncMock
 
@@ -8,7 +9,7 @@ import av
 import pytest
 import torch
 from comfy_api.input import VideoInput
-from comfyui_vllm_omni.nodes import VLLMOmniVideoReferences
+from comfyui_vllm_omni.nodes import VLLMOmniMiniMaxH3Params, VLLMOmniVideoReferences
 from comfyui_vllm_omni.utils import api_client
 from PIL import Image
 
@@ -135,4 +136,32 @@ async def test_unsupported_reference_slots_are_not_silently_ignored(api_calls, n
 async def test_frame_and_references_are_mutually_exclusive(api_calls):
     with pytest.raises(ValueError, match="only one of frame or references"):
         await _generate(_references(1, 0, 0), frame=torch.zeros(1, 16, 16, 3))
+    api_calls.assert_not_called()
+
+
+def _extra_params(api_calls):
+    fields = api_calls.call_args_list[0].kwargs["data"]._fields
+    (value,) = [value for options, _, value in fields if options["name"] == "extra_params"]
+    return json.loads(value)
+
+
+@pytest.mark.parametrize("audio_mode", ["native", "lock_source"])
+async def test_h3_audio_mode_is_forwarded_only_when_locking_the_soundtrack(api_calls, audio_mode):
+    (refs,) = VLLMOmniVideoReferences().get_references(**_references(1, 0, 1))
+    (params,) = VLLMOmniMiniMaxH3Params().get_params(audio_flow_shift=3.0, flow_shift=12.0, audio_mode=audio_mode)
+    await _generate(refs, model_params=params)
+    extra_params = _extra_params(api_calls)
+    assert extra_params["task"] == "ref2va"
+    if audio_mode == "native":
+        assert "audio_mode" not in extra_params
+    else:
+        assert extra_params["audio_mode"] == "lock_source"
+
+
+@pytest.mark.parametrize("counts", [None, (1, 0, 0), (1, 0, 2)])
+async def test_h3_lock_source_requires_exactly_one_driving_audio(api_calls, counts):
+    (params,) = VLLMOmniMiniMaxH3Params().get_params(audio_flow_shift=3.0, flow_shift=12.0, audio_mode="lock_source")
+    refs = None if counts is None else _references(*counts)
+    with pytest.raises(ValueError, match="exactly one audio"):
+        await _generate(refs, model_params=params)
     api_calls.assert_not_called()
