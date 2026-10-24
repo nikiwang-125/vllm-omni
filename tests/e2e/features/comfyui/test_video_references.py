@@ -156,12 +156,3 @@ async def test_h3_audio_mode_is_forwarded_only_when_locking_the_soundtrack(api_c
         assert "audio_mode" not in extra_params
     else:
         assert extra_params["audio_mode"] == "lock_source"
-
-
-@pytest.mark.parametrize("counts", [None, (1, 0, 0), (1, 0, 2)])
-async def test_h3_lock_source_requires_exactly_one_driving_audio(api_calls, counts):
-    (params,) = VLLMOmniMiniMaxH3Params().get_params(audio_flow_shift=3.0, flow_shift=12.0, audio_mode="lock_source")
-    refs = None if counts is None else _references(*counts)
-    with pytest.raises(ValueError, match="exactly one audio"):
-        await _generate(refs, model_params=params)
-    api_calls.assert_not_called()

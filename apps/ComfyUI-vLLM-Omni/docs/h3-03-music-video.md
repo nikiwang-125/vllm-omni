@@ -34,7 +34,7 @@ With `audio_mode=lock_source`, the server places the single driving audio in
 the target audio latent, crops or zero-pads it to the shot duration, and keeps
 it clean throughout sampling. The driving audio is not a `<Audio 1>` reference
 tag; it is the shot's soundtrack. The node sends `audio_mode` only for
-`lock_source`, so requests from other workflows are unchanged. The client
+`lock_source`, so requests from other workflows are unchanged. The server
 rejects `lock_source` unless exactly one audio is connected to Video
 References.
 

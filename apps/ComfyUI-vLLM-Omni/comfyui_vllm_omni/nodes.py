@@ -15,7 +15,6 @@ from .utils.types import (
     MAX_REFERENCE_AUDIOS,
     MAX_REFERENCE_IMAGES,
     MAX_REFERENCE_VIDEOS,
-    MINIMAX_H3_AUDIO_MODES,
     AudioFormat,
     AutoregressionSamplingParams,
     DiffusionSamplingParams,
@@ -1033,7 +1032,7 @@ class VLLMOmniMiniMaxH3Params:
                     {"default": 12.0, "min": 0.0, "max": 100.0, "step": 0.1},
                 ),
                 "audio_mode": (
-                    MINIMAX_H3_AUDIO_MODES,
+                    ["native", "lock_source"],
                     {
                         "default": "native",
                         "tooltip": (
